@@ -24,11 +24,11 @@
           v-for="(element, index) in tarefas"
           :class="{ item: !element.status, item2: element.status }"
           :key="element.nome"
-          @click.stop.prevent="mudar(index)"
+          @click.stop.prevent="changeStatus(index)"
         >
           {{ element.nome }}
           <b-button
-            @click.stop.prevent="deletar(index)"
+            @click.stop.prevent="deleteItem(index)"
             variant="danger"
             class="btDeletar"
             >x</b-button
@@ -56,6 +56,7 @@ export default {
       const { tarefas } = this;
       const len = tarefas.length;
       const concluida = tarefas.filter((element) => element.status).length;
+      
       return len !== 0 ? parseInt((concluida * 100) / len, 10) : 0;
     },
   },
@@ -68,10 +69,10 @@ export default {
     },
   },
   methods: {
-    deletar(index) {
+    deleteItem(index) {
       this.tarefas.splice(index, 1);
     },
-    mudar(index) {
+    changeStatus(index) {
       this.tarefas[index].status = !this.tarefas[index].status;
     },
     add() {
