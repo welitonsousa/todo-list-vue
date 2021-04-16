@@ -1,20 +1,12 @@
-  <template>
+<template>
   <div>
-    <div>
-      <span class="progress">
-        <span
-          :style="`width: ${porcentagem}%`"
-          class="porcentagem"
-        >
-          <h3 class="numeroPorcentagem">{{porcentagem}}%</h3>
-        </span>
+    <span class="progress">
+      <span :style="`width: ${porcentagem}%`" class="porcentagem">
+        <h3 class="numeroPorcentagem">{{ porcentagem }}%</h3>
       </span>
-    </div>
+    </span>
     <div>
-      <b-input-group
-        class="novaTarefa"
-        size="lg"
-      >
+      <b-input-group class="novaTarefa" size="lg">
         <b-form-input
           @keyup.enter.stop.prevent="add"
           class="corFundo"
@@ -22,34 +14,29 @@
           v-model="tarefaDigitada"
         ></b-form-input>
         <b-input-group-append>
-          <b-button
-            variant="success"
-            @click.stop.prevent="add"
-          >+</b-button>
+          <b-button variant="success" @click.stop.prevent="add">+</b-button>
         </b-input-group-append>
       </b-input-group>
     </div>
     <div>
       <div class="container wrap">
         <div
-          :class="{item: !i.status, item2:i.status}"
-          v-for="(i, index) in tarefas"
-          :key="i.nome"
+          v-for="(element, index) in tarefas"
+          :class="{ item: !element.status, item2: element.status }"
+          :key="element.nome"
           @click.stop.prevent="mudar(index)"
         >
-          {{i.nome}}
+          {{ element.nome }}
           <b-button
             @click.stop.prevent="deletar(index)"
             variant="danger"
             class="btDeletar"
-          >x</b-button>
+            >x</b-button
+          >
         </div>
       </div>
     </div>
-    <div
-      href="#"
-      id="foo"
-    ></div>
+    <div href="#" id="foo"></div>
   </div>
 </template>
 
@@ -57,21 +44,18 @@
 export default {
   data() {
     return {
-      tarefaDigitada: '',
+      tarefaDigitada: "",
       tarefas: [],
-      tarefaDiferente: true,
-      vareavel: true,
     };
   },
   created() {
-    this.tarefas = localStorage.tarefas
-      ? JSON.parse(localStorage.tarefas) : [];
+    this.tarefas = localStorage.tarefas ? JSON.parse(localStorage.tarefas) : [];
   },
   computed: {
     porcentagem() {
       const { tarefas } = this;
       const len = tarefas.length;
-      const concluida = tarefas.filter(t => t.status === true).length;
+      const concluida = tarefas.filter((element) => element.status).length;
       return len !== 0 ? parseInt((concluida * 100) / len, 10) : 0;
     },
   },
@@ -79,7 +63,7 @@ export default {
     tarefas: {
       deep: true,
       handler() {
-        localStorage.setItem('tarefas', JSON.stringify(this.tarefas));
+        localStorage.setItem("tarefas", JSON.stringify(this.tarefas));
       },
     },
   },
@@ -91,12 +75,14 @@ export default {
       this.tarefas[index].status = !this.tarefas[index].status;
     },
     add() {
-      const valor = (this.tarefas.every(element => element.nome !== this.tarefaDigitada));
+      const valor = this.tarefas.every(
+        (element) => element.nome !== this.tarefaDigitada
+      );
       if (valor) {
         this.tarefas.push({ nome: this.tarefaDigitada, status: false });
-        window.location.href = '#foo';
+        window.location.href = "#foo";
       }
-      this.tarefaDigitada = '';
+      this.tarefaDigitada = "";
     },
   },
 };
